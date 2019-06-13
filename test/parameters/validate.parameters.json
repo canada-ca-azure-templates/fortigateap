@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "fwObject": {
+            "value": {
+                "vmKeyVault": {
+                    "keyVaultResourceGroupName": "PwS2-validate-fortigateap-RG",
+                    "keyVaultName": "PwS2-validate-[unique]"
+                },
+                "adminUsername": "fwadmin",
+                "adminSecret": "fwsecret",
+                "FortiGateNamePrefix": "validate",
+                "FortiGateImageSKU": "fortinet_fg-vm_payg",
+                "FortiGateVersion": "latest",
+                "instanceType": "Standard_F4",
+                "publicIPNewOrExisting": "new",
+                "publicIP2NewOrExisting": "new",
+                "publicIP3NewOrExisting": "new",
+                "publicIPAddressName": "FGTAPClusterPublicIP",
+                "publicIPAddressResourceGroup": "PwS2-validate-fortigateap-RG",
+                "publicIPAddress2Name": "FGTAMgmtPublicIP",
+                "publicIPAddress2ResourceGroup": "PwS2-validate-fortigateap-RG",
+                "publicIPAddress3Name": "FGTBMgmtPublicIP",
+                "publicIPAddress3ResourceGroup": "PwS2-validate-fortigateap-RG",
+                "publicIPAddressType": "Static",
+                "vnetName": "PwS2-validate-fortigateAP-VNET",
+                "vnetResourceGroup": "PwS2-validate-fortigateap-RG",
+                "vnetAddressPrefix": "10.0.0.0/16",
+                "Subnet1Name": "outside",
+                "Subnet1Prefix": "10.0.1.0/24",
+                "Subnet2Name": "inside",
+                "Subnet2Prefix": "10.0.2.0/24",
+                "FGTAIPSubnet2": "10.0.2.4",
+                "Subnet3Name": "HASync",
+                "Subnet3Prefix": "10.0.3.0/28",
+                "Subnet4Name": "management",
+                "Subnet4Prefix": "10.0.4.0/28",
+                "firewall1Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiT3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJPdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiQ29yZVRvU3Bva2VzIg0KICAgICAgICBzZXQgYWxpYXMgIkNvcmVUb1Nwb2tlcyINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMg0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQplbmQNCmNvbmZpZyBzeXMgYXV0by1zY2FsZQ0KICAgIHNldCBzdGF0IGVuYWJsZQ0KICAgIHNldCByb2xlIG1hc3Rlcg0KICAgIHNldCBzeW5jLWludCBwb3J0Mg0KICAgIHNldCBwc2tzZWNyZXQgQ2FuYWRhMTIzNDU2IQ0KZW5k",
+                "firewall2Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiT3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJPdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiQ29yZVRvU3Bva2VzIg0KICAgICAgICBzZXQgYWxpYXMgIkNvcmVUb1Nwb2tlcyINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMg0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQplbmQNCmNvbmZpZyBzeXMgYXV0by1zY2FsZQ0KICAgIHNldCBzdGF0IGVuYWJsZQ0KICAgIHNldCBtYXN0ZXItaXAgMTAuMjUwLjIuNQ0KICAgIHNldCBzeW5jLWludCBwb3J0Mg0KICAgIHNldCBwc2tzZWNyZXQgQ2FuYWRhMTIzNDU2IQ0KZW5k",
+                "tagValues": {
+                    "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                    "CostCenter": "PSPC-EA",
+                    "Enviroment": "Validate",
+                    "Classification": "Unclassified",
+                    "Organizations": "PSPC-CCC-E&O"
+                }
+            }
+        }
+    }
+}
