@@ -1,8 +1,8 @@
-# Fortigate HA
+# Fortigate HA AP (Active Passive)
 
 ## Introduction
 
-This template deploys a 2 x 2 NIC Fortigate Firewall resource in an HA configuration.
+This template deploys a 2 x 4 NIC Fortigate Firewall resource in an HA Active Passive configuration.
 
 ## Security Controls
 
@@ -26,36 +26,39 @@ The following security controls can be met through configuration of this templat
         "fwObject": {
             "value": {
                 "vmKeyVault": {
-                    "keyVaultResourceGroupName": "PwS2-validate-fortigateap-RG",
+                    "keyVaultResourceGroupName": "PwS2-validate-fortigateAP-RG",
                     "keyVaultName": "PwS2-validate-[unique]"
                 },
-                "FortiGateName": "validate01",
                 "adminUsername": "fwadmin",
                 "adminSecret": "fwpassword",
+                "FortiGateNamePrefix": "validate",
                 "FortiGateImageSKU": "fortinet_fg-vm",
-                "FortiGateImageVersion": "latest",
-                "instanceType": "Standard_F4s",
-                "publicIPAddressName": "validate01-publicip1",
-                "publicIP2AddressName": "validate01-publicip2",
-                "publicIPNewOrExistingOrNone": "new",
-                "publicIP2NewOrExistingOrNone": "new",
-                "publicIPResourceGroup": "PwS2-validate-fortigateap-RG",
-                "publicIP2ResourceGroup": "PwS2-validate-fortigateap-RG",
-                "location": "canadacentral",
-                "vnetNewOrExisting": "existing",
+                "FortiGateVersion": "latest",
+                "instanceType": "Standard_F4",
+                "publicIPNewOrExisting": "new",
+                "publicIP2NewOrExisting": "new",
+                "publicIP3NewOrExisting": "new",
+                "publicIPAddressName": "FGTAPClusterPublicIP",
+                "publicIPAddressResourceGroup": "PwS2-validate-fortigateAP-RG",
+                "publicIP2AddressName": "FGTAMgmtPublicIP",
+                "publicIP2AddressResourceGroup": "PwS2-validate-fortigateAP-RG",
+                "publicIP3AddressName": "FGTBMgmtPublicIP",
+                "publicIP3AddressResourceGroup": "PwS2-validate-fortigateAP-RG",
+                "publicIPAddressType": "Static",
                 "vnetName": "PwS2-validate-fortigateAP-VNET",
-                "vnetResourceGroup": "PwS2-validate-fortigateap-RG",
+                "vnetResourceGroup": "PwS2-validate-fortigateAP-RG",
                 "Subnet1Name": "outside",
                 "Subnet2Name": "inside",
-                "firewall1Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiT3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJPdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiQ29yZVRvU3Bva2VzIg0KICAgICAgICBzZXQgYWxpYXMgIkNvcmVUb1Nwb2tlcyINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMg0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQplbmQNCmNvbmZpZyBzeXMgYXV0by1zY2FsZQ0KICAgIHNldCBzdGF0IGVuYWJsZQ0KICAgIHNldCByb2xlIG1hc3Rlcg0KICAgIHNldCBzeW5jLWludCBwb3J0Mg0KICAgIHNldCBwc2tzZWNyZXQgQ2FuYWRhMTIzNDU2IQ0KZW5k",
-                "firewall2Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiT3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJPdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtIHByb2JlLXJlc3BvbnNlDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAiQ29yZVRvU3Bva2VzIg0KICAgICAgICBzZXQgYWxpYXMgIkNvcmVUb1Nwb2tlcyINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMg0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQplbmQNCmNvbmZpZyBzeXMgYXV0by1zY2FsZQ0KICAgIHNldCBzdGF0IGVuYWJsZQ0KICAgIHNldCBtYXN0ZXItaXAgMTAuMjUwLjIuNQ0KICAgIHNldCBzeW5jLWludCBwb3J0Mg0KICAgIHNldCBwc2tzZWNyZXQgQ2FuYWRhMTIzNDU2IQ0KZW5k",
+                "Subnet3Name": "HASync",
+                "Subnet4Name": "management",
+                "firewall1Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAxIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAib3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJvdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgdHlwZSBwaHlzaWNhbA0KICAgICAgICBzZXQgZGVzY3JpcHRpb24gImluc2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJpbnNpZGUiDQogICAgICAgIHNldCBzbm1wLWluZGV4IDINCiAgICAgICAgc2V0IGRlZmF1bHRndyBkaXNhYmxlDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQzIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgdHlwZSBwaHlzaWNhbA0KICAgICAgICBzZXQgZGVzY3JpcHRpb24gImhhc3luY3BvcnQiDQogICAgICAgIHNldCBhbGlhcyAiaGFzeW5jcG9ydCINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMw0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQogICAgZWRpdCAicG9ydDQiDQogICAgICAgIHNldCB2ZG9tICJyb290Ig0KICAgICAgICBzZXQgbW9kZSBkaGNwDQogICAgICAgIHNldCBhbGxvd2FjY2VzcyBwaW5nIGh0dHBzIHNzaCBodHRwIGZnZm0NCiAgICAgICAgc2V0IHR5cGUgcGh5c2ljYWwNCiAgICAgICAgc2V0IGRlc2NyaXB0aW9uICJtYW5hZ2VtZW50Ig0KICAgICAgICBzZXQgYWxpYXMgIm1hbmFnZW1lbnQiDQogICAgICAgIHNldCBzbm1wLWluZGV4IDQNCiAgICAgICAgc2V0IGRlZmF1bHRndyBkaXNhYmxlDQogICAgbmV4dA0KZW5kDQpjb25maWcgc3lzdGVtIGhhDQogIHNldCBncm91cC1uYW1lICJBenVyZUhBIg0KICBzZXQgbW9kZSBhLXANCiAgc2V0IGhiZGV2ICJwb3J0MyIgMTAwDQogIHNldCBzZXNzaW9uLXBpY2t1cCBlbmFibGUNCiAgc2V0IHNlc3Npb24tcGlja3VwLWNvbm5lY3Rpb25sZXNzIGVuYWJsZQ0KICBzZXQgaGEtbWdtdC1zdGF0dXMgZW5hYmxlDQogIGNvbmZpZyBoYS1tZ210LWludGVyZmFjZXMNCiAgICBlZGl0IDENCiAgICAgIHNldCBpbnRlcmZhY2UgInBvcnQ0Ig0KICAgICAgc2V0IGdhdGV3YXkgMTAuMC40LjENCiAgICBuZXh0DQogIGVuZA0KICBzZXQgb3ZlcnJpZGUgZGlzYWJsZQ0KICBzZXQgcHJpb3JpdHkgMjU1DQogIHNldCB1bmljYXN0LWhiIGVuYWJsZQ0KICBzZXQgdW5pY2FzdC1oYi1wZWVyaXAgMTAuMC4zLjUNCmVuZA==",
+                "firewall2Config": "Y29uZmlnIHN5c3RlbSBnbG9iYWwNCiAgICBzZXQgYWRtaW4tc3BvcnQgODQ0Mw0KICAgIHNldCBhbGlhcyAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCBob3N0bmFtZSAiUHdQMEZXQ29yZTAyIg0KICAgIHNldCB0aW1lem9uZSAwNA0KZW5kDQpjb25maWcgc3lzdGVtIGludGVyZmFjZQ0KICAgIGVkaXQgInBvcnQxIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgYWxsb3dhY2Nlc3MgcGluZyBodHRwcyBzc2ggaHR0cCBmZ2ZtDQogICAgICAgIHNldCB0eXBlIHBoeXNpY2FsDQogICAgICAgIHNldCBkZXNjcmlwdGlvbiAib3V0c2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJvdXRzaWRlIg0KICAgICAgICBzZXQgc25tcC1pbmRleCAxDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQyIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgdHlwZSBwaHlzaWNhbA0KICAgICAgICBzZXQgZGVzY3JpcHRpb24gImluc2lkZSINCiAgICAgICAgc2V0IGFsaWFzICJpbnNpZGUiDQogICAgICAgIHNldCBzbm1wLWluZGV4IDINCiAgICAgICAgc2V0IGRlZmF1bHRndyBkaXNhYmxlDQogICAgbmV4dA0KICAgIGVkaXQgInBvcnQzIg0KICAgICAgICBzZXQgdmRvbSAicm9vdCINCiAgICAgICAgc2V0IG1vZGUgZGhjcA0KICAgICAgICBzZXQgdHlwZSBwaHlzaWNhbA0KICAgICAgICBzZXQgZGVzY3JpcHRpb24gImhhc3luY3BvcnQiDQogICAgICAgIHNldCBhbGlhcyAiaGFzeW5jcG9ydCINCiAgICAgICAgc2V0IHNubXAtaW5kZXggMw0KICAgICAgICBzZXQgZGVmYXVsdGd3IGRpc2FibGUNCiAgICBuZXh0DQogICAgZWRpdCAicG9ydDQiDQogICAgICAgIHNldCB2ZG9tICJyb290Ig0KICAgICAgICBzZXQgbW9kZSBkaGNwDQogICAgICAgIHNldCBhbGxvd2FjY2VzcyBwaW5nIGh0dHBzIHNzaCBodHRwIGZnZm0NCiAgICAgICAgc2V0IHR5cGUgcGh5c2ljYWwNCiAgICAgICAgc2V0IGRlc2NyaXB0aW9uICJtYW5hZ2VtZW50Ig0KICAgICAgICBzZXQgYWxpYXMgIm1hbmFnZW1lbnQiDQogICAgICAgIHNldCBzbm1wLWluZGV4IDQNCiAgICAgICAgc2V0IGRlZmF1bHRndyBkaXNhYmxlDQogICAgbmV4dA0KZW5kDQpjb25maWcgc3lzdGVtIGhhDQogIHNldCBncm91cC1uYW1lICJBenVyZUhBIg0KICBzZXQgbW9kZSBhLXANCiAgc2V0IGhiZGV2ICJwb3J0MyIgMTAwDQogIHNldCBzZXNzaW9uLXBpY2t1cCBlbmFibGUNCiAgc2V0IHNlc3Npb24tcGlja3VwLWNvbm5lY3Rpb25sZXNzIGVuYWJsZQ0KICBzZXQgaGEtbWdtdC1zdGF0dXMgZW5hYmxlDQogIGNvbmZpZyBoYS1tZ210LWludGVyZmFjZXMNCiAgICBlZGl0IDENCiAgICAgIHNldCBpbnRlcmZhY2UgInBvcnQ0Ig0KICAgICAgc2V0IGdhdGV3YXkgMTAuMC40LjENCiAgICBuZXh0DQogIGVuZA0KICBzZXQgb3ZlcnJpZGUgZGlzYWJsZQ0KICBzZXQgcHJpb3JpdHkgMQ0KICBzZXQgdW5pY2FzdC1oYiBlbmFibGUNCiAgc2V0IHVuaWNhc3QtaGItcGVlcmlwIDEwLjAuMy40DQplbmQNCg==",
                 "tagValues": {
                     "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
                     "CostCenter": "PSPC-EA",
                     "Enviroment": "Validate",
                     "Classification": "Unclassified",
-                    "Organizations": "PSPC-CCC-E&O",
-                    "DeploymentVersion": "2018-12-14-01"
+                    "Organizations": "PSPC-CCC-E&O"
                 }
             }
         }
@@ -76,44 +79,34 @@ The following security controls can be met through configuration of this templat
 
 ### Fortigate2NIC Object
 
-| Name                         | Type   | Required | Value                                                                                                                                                           |
-| ---------------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| vmKeyVault                   | object | Yes      | Keyvault resource information - [Keyvault Object](#keyvault-object)                                                                                             |
-| FortiGateName                | string | Yes      | Name of the firewall Virtual Machine.                                                                                                                           |
-| adminUsername                | string | Yes      | Name of the Fortigate admin user                                                                                                                                |
-| adminSecret                  | string | Yes      | Name of the keyvault secret containing the Fortigate admin user password                                                                                        |
-| FortiGateImageSKU            | string | Yes      | SKU for the fortigate image - fortinet_fg-vm or fortinet_fg-vm_payg                                                                                             |
-| FortiGateImageVersion        | string | Yes      | Version of the firewall marketplace image - 5.6.6, 6.0.3, 6.0.4 or latest. Recommended values: latest                                                           |
-| instanceType                 | string | Yes      | Virtual Machine size selection. Recommended value: Standard_F4s                                                                                                 |
-| publicIPAddressName          | string | Yes      | Name of the Public IP Address                                                                                                                                   |
-| publicIP2AddressName         | string | Yes      | Name of the Public IP 2 Address                                                                                                                                 |
-| publicIPAddressType          | string | Yes      | Type of public IP address - dynamic or static. Recommended value: static                                                                                        |
-| publicIPNewOrExistingOrNone  | string | Yes      | Indicates whether a Public IP is required - none, new or existing. Recommended value: none unless one is required. In this case: new                            |
-| publicIP2NewOrExistingOrNone | string | Yes      | Indicates whether a Public IP 2 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
-| publicIPResourceGroup        | string | Yes      | Resource Group of the public IP                                                                                                                                 |
-| publicIP2ResourceGroup       | string | Yes      | Resource Group of the public IP 2                                                                                                                               |
-| location                     | string | Yes      | Location of the resource. Either canadacentral or canadaeast                                                                                                    |
-| vnetNewOrExisting            | string | Yes      | Identify whether to use a new or existing vnet - new or existing. Recommended value: existing                                                                   |
-| vnetName                     | string | Yes      | Virtual Network name                                                                                                                                            |
-| vnetResourceGroup            | string | Yes      | Name of the Resource Group containing the VNET defined above                                                                                                    |
-| authenticationType           | string | Yes      | Type of authentication. Allowed values are password or sshPublicKey                                                                                             |
-| vmSize                       | string | Yes      | Size of the Virtual Machine. Recommended value is one of Standard_D3 or Standard_D3_v2                                                                          |
-| storageAccountName           | string | Yes      | Storage Account prefix where the Virtual Machine's disks and/or diagnostic files will be placed. Name will be made unique.                                      |
-| storageAccountRG             | string | Yes      | Name of the Resource Group for the storage account defined above                                                                                                |
-| storageAccountType           | string | Yes      | The type of storage account created. Recommended value is Standard_LRS                                                                                          |
-| storageAccountNewOrExisting  | string | Yes      | Should the storage account be created as part of the deployment. Possible value is new or existing. Recommended value is new                                    |
-| publicIPDnsLabel             | string | Yes      | DNS Prefix for the Public IP used to access the Virtual Machine. Will be made unique.                                                                           |
-| publicIPNewOrExisting        | string | Yes      | Indicates whether the Public IP is new or existing                                                                                                              |
-| publicIPRG                   | string | Yes      | Resource Group of the public IP                                                                                                                                 |
-| publicIPAllocationMethod     | string | Yes      | Enter Dynamic or Static as the type of public IP                                                                                                                |
-| publicIPsku                  | string | Yes      | Indicates whether the public IP SKU will be of Basic or Standard                                                                                                |
-| virtualNetworkName           | string | Yes      | Virtual Network name                                                                                                                                            |
-| virtualNetworkRG             | string | Yes      | Name of the Resource Group containing the VNET defined above                                                                                                    |
-| Subnet1Name                  | string | Yes      | Name of the external subnet                                                                                                                                     |
-| Subnet2Name                  | string | Yes      | Name of the internal subnet                                                                                                                                     |
-| firewall1Config              | string | Yes      | Base64 encoded multipart/mixed string of [Firewall Config and License](#firewall-config-and-license). Leave empty ("") if no firewall configuration is required |
-| firewall2Config              | string | Yes      | Base64 encoded multipart/mixed string of [Firewall Config and License](#firewall-config-and-license). Leave empty ("") if no firewall configuration is required |
-| tagValues                    | object | Yes      | Object of tag values                                                                                                                                            |
+| Name                          | Type   | Required | Value                                                                                                                                                           |
+| ----------------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| vmKeyVault                    | object | Yes      | Keyvault resource information - [Keyvault Object](#keyvault-object)                                                                                             |
+| FortiGateName                 | string | Yes      | Name of the firewall Virtual Machine.                                                                                                                           |
+| adminUsername                 | string | Yes      | Name of the Fortigate admin user                                                                                                                                |
+| adminSecret                   | string | Yes      | Name of the keyvault secret containing the Fortigate admin user password                                                                                        |
+| FortiGateImageSKU             | string | Yes      | SKU for the fortigate image - fortinet_fg-vm or fortinet_fg-vm_payg                                                                                             |
+| FortiGateImageVersion         | string | Yes      | Version of the firewall marketplace image - 5.6.6, 6.0.3, 6.0.4 or latest. Recommended values: latest                                                           |
+| instanceType                  | string | Yes      | Virtual Machine size selection. Recommended value: Standard_F4s                                                                                                 |
+| publicIPAddressName           | string | Yes      | Name of the Public IP Address                                                                                                                                   |
+| publicIP2AddressName          | string | Yes      | Name of the Public IP 2 Address                                                                                                                                 |
+| publicIPAddressType           | string | Yes      | Type of public IP address - dynamic or static. Recommended value: static                                                                                        |
+| publicIPNewOrExisting         | string | Yes      | Indicates whether a Public IP is required - none, new or existing. Recommended value: none unless one is required. In this case: new                            |
+| publicIP2NewOrExisting        | string | Yes      | Indicates whether a Public IP 2 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
+| publicIP3NewOrExisting        | string | Yes      | Indicates whether a Public IP 3 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
+| publicIPAddressResourceGroup  | string | Yes      | Resource Group of the public IP                                                                                                                                 |
+| publicIP2AddressResourceGroup | string | Yes      | Resource Group of the public IP 2                                                                                                                               |
+| publicIP3AddressResourceGroup | string | Yes      | Resource Group of the public IP 3                                                                                                                               |
+| publicIPAddressType           | string | Yes      | Type of public IP. - Static or Dynamic                                                                                                                          |
+| vnetName                      | string | Yes      | Virtual Network name                                                                                                                                            |
+| vnetResourceGroup             | string | Yes      | Name of the Resource Group containing the VNET defined above                                                                                                    |
+| Subnet1Name                   | string | Yes      | Name of the external subnet                                                                                                                                     |
+| Subnet2Name                   | string | Yes      | Name of the internal subnet                                                                                                                                     |
+| Subnet3Name                   | string | Yes      | Name of the internal subnet                                                                                                                                     |
+| Subnet4Name                   | string | Yes      | Name of the internal subnet                                                                                                                                     |
+| firewall1Config               | string | Yes      | Base64 encoded multipart/mixed string of [Firewall Config and License](#firewall-config-and-license). Leave empty ("") if no firewall configuration is required |
+| firewall2Config               | string | Yes      | Base64 encoded multipart/mixed string of [Firewall Config and License](#firewall-config-and-license). Leave empty ("") if no firewall configuration is required |
+| tagValues                     | object | Yes      | Object of tag values                                                                                                                                            |
 
 ### Keyvault Object
 
@@ -157,28 +150,58 @@ config system interface
     edit "port1"
         set vdom "root"
         set mode dhcp
-        set allowaccess ping https ssh http fgfm probe-response
+        set allowaccess ping https ssh http fgfm
         set type physical
-        set description "Outside"
-        set alias "Outside"
+        set description "outside"
+        set alias "outside"
         set snmp-index 1
     next
     edit "port2"
         set vdom "root"
         set mode dhcp
-        set allowaccess ping https ssh http fgfm probe-response
         set type physical
-        set description "CoreToSpokes"
-        set alias "CoreToSpokes"
+        set description "inside"
+        set alias "inside"
         set snmp-index 2
         set defaultgw disable
     next
+    edit "port3"
+        set vdom "root"
+        set mode dhcp
+        set type physical
+        set description "hasyncport"
+        set alias "hasyncport"
+        set snmp-index 3
+        set defaultgw disable
+    next
+    edit "port4"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http fgfm
+        set type physical
+        set description "management"
+        set alias "management"
+        set snmp-index 4
+        set defaultgw disable
+    next
 end
-config sys auto-scale
-    set stat enable
-    set role master
-    set sync-int port2
-    set psksecret Canada123456!
+config system ha
+  set group-name "AzureHA"
+  set mode a-p
+  set hbdev "port3" 100
+  set session-pickup enable
+  set session-pickup-connectionless enable
+  set ha-mgmt-status enable
+  config ha-mgmt-interfaces
+    edit 1
+      set interface "port4"
+      set gateway 10.0.4.1
+    next
+  end
+  set override disable
+  set priority 255
+  set unicast-hb enable
+  set unicast-hb-peerip 10.0.3.5
 end
 
 --===============0740947994048919689==
@@ -212,4 +235,4 @@ uH+sdb3Nuc0=
 
 | Date     | Release                                                                            | Change                  |
 | -------- | ---------------------------------------------------------------------------------- | ----------------------- |
-| 20190613 | [20190613](https://github.com/canada-ca-azure-templates/fortigateap/tree/20190613) | 1st release of template |
+| 20190614 | [20190614](https://github.com/canada-ca-azure-templates/fortigateha/tree/20190614) | 1st release of template |

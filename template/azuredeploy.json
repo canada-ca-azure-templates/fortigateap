@@ -76,15 +76,13 @@
     ],
     "resources": [
         {
-            "name": "[concat('FortigateHA-deploy-', parameters('fwObject').FortiGateName)]",
+            "name": "[concat('FortigateHA-deploy-', parameters('fwObject').FortiGateNamePrefix)]",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2018-05-01",
             "properties": {
                 "mode": "Incremental",
                 "parameters": {
                     "fwObject": { "value": "[parameters('fwObject')]" },
-                    "containerSaSToken": {"value": "[parameters('containerSasToken')]"},
-                    "_artifactsLocation": {"value": "[parameters('_artifactsLocation')]"},
                     "adminPassword": {
                         "reference": {
                             "keyVault": {

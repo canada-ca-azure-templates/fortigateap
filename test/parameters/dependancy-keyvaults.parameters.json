@@ -6,7 +6,7 @@
             "value": [
                 {
                     "name": "PwS2-validate-[unique]",
-                    "resourceGroup": "PwS2-validate-fortigateap-RG",
+                    "resourceGroup": "PwS2-validate-fortigateAP-RG",
                     "sku": "Standard",
                     "enabledForDeployment": true,
                     "enabledForTemplateDeployment": true,

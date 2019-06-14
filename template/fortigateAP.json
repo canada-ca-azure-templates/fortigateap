@@ -10,14 +10,6 @@
             "metadata": {
                 "description": "Password for the Virtual Machine."
             }
-        },
-        "artifactsBaseUrl": {
-            "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/fortinetsolutions/Azure-Templates/master/FortiGate/Active-Passive HA",
-            "metadata": {
-                "description": "Base URL of the solution template gallery package",
-                "artifactsBaseUrl": ""
-            }
         }
     },
     "variables": {
@@ -30,9 +22,6 @@
         "subnet4Ref": "[concat(variables('vnetID'),'/subnets/', parameters('fwObject').Subnet4Name)]",
         "vmName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-A')]",
         "vm2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-B')]",
-        "routeTableName": "FGTDefaultAPRouteTable",
-        "subnet2KnownIP": "[parameters('fwObject').FGTAIPSubnet2]",
-        "routeTableId": "[resourceId('Microsoft.Network/routeTables',variables('routeTableName'))]",
         "compute_VM_fg1_Name": "[variables('vmName')]",
         "compute_VM_fg2_Name": "[variables('vm2Name')]",
         "network_NIC_fg11_Name": "[concat(variables('vmName'),'-Nic1')]",
@@ -52,42 +41,9 @@
         "network_NIC_fg24_Name": "[concat(variables('vm2Name'),'-Nic4')]",
         "network_NIC_fg24_Id": "[resourceId('Microsoft.Network/networkInterfaces',variables('network_NIC_fg24_Name'))]",
         "publicIPID": "[resourceID(parameters('fwObject').publicIPAddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIPAddressName)]",
-        "publicIP2ID": "[resourceID(parameters('fwObject').publicIPAddress2ResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP2AddressName)]",
-        "publicIP3ID": "[resourceID(parameters('fwObject').publicIPAddress3ResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP3AddressName)]",
-        "NSGName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-',uniqueString(resourceGroup().id),'-NSG')]",
-        "sn1IPArray": "[split(parameters('fwObject').Subnet1Prefix,'.')]",
-        "sn1IPArray2ndString": "[string(variables('sn1IPArray')[3])]",
-        "sn1IPArray2nd": "[split(variables('sn1IPArray2ndString'),'/')]",
-        "sn1CIDRmask": "[string(int(variables('sn1IPArray2nd')[1]))]",
-        "sn1IPArray3": "[string(add(int(variables('sn1IPArray2nd')[0]),1))]",
-        "sn1IPArray2": "[string(int(variables('sn1IPArray')[2]))]",
-        "sn1IPArray1": "[string(int(variables('sn1IPArray')[1]))]",
-        "sn1IPArray0": "[string(int(variables('sn1IPArray')[0]))]",
-        "sn1GatewayIP": "[concat(variables('sn1IPArray0'),'.',variables('sn1IPArray1'),'.',variables('sn1IPArray2'),'.',variables('sn1IPArray3'))]",
-        "sn2IPArray": "[split(parameters('fwObject').Subnet2Prefix,'.')]",
-        "sn2IPArray2ndString": "[string(variables('sn2IPArray')[3])]",
-        "sn2IPArray2nd": "[split(variables('sn2IPArray2ndString'),'/')]",
-        "sn2CIDRmask": "[string(int(variables('sn2IPArray2nd')[1]))]",
-        "sn2IPArray3": "[string(add(int(variables('sn2IPArray2nd')[0]),1))]",
-        "sn2IPArray2": "[string(int(variables('sn2IPArray')[2]))]",
-        "sn2IPArray1": "[string(int(variables('sn2IPArray')[1]))]",
-        "sn2IPArray0": "[string(int(variables('sn2IPArray')[0]))]",
-        "sn2GatewayIP": "[concat(variables('sn2IPArray0'),'.',variables('sn2IPArray1'),'.',variables('sn2IPArray2'),'.',variables('sn2IPArray3'))]",
-        "sn3IPArray": "[split(parameters('fwObject').Subnet3Prefix,'.')]",
-        "sn3IPArray2ndString": "[string(variables('sn3IPArray')[3])]",
-        "sn3IPArray2nd": "[split(variables('sn3IPArray2ndString'),'/')]",
-        "sn3CIDRmask": "[string(int(variables('sn3IPArray2nd')[1]))]",
-        "sn4IPArray": "[split(parameters('fwObject').Subnet4Prefix,'.')]",
-        "sn4IPArray2ndString": "[string(variables('sn4IPArray')[3])]",
-        "sn4IPArray2nd": "[split(variables('sn4IPArray2ndString'),'/')]",
-        "sn4CIDRmask": "[string(int(variables('sn4IPArray2nd')[1]))]",
-        "sn4IPArray3": "[string(add(int(variables('sn4IPArray2nd')[0]),1))]",
-        "sn4IPArray2": "[string(int(variables('sn4IPArray')[2]))]",
-        "sn4IPArray1": "[string(int(variables('sn4IPArray')[1]))]",
-        "sn4IPArray0": "[string(int(variables('sn4IPArray')[0]))]",
-        "sn4GatewayIP": "[concat(variables('sn4IPArray0'),'.',variables('sn4IPArray1'),'.',variables('sn4IPArray2'),'.',variables('sn4IPArray3'))]",
-        "updateIPURI": "[concat(parameters('artifactsBaseURL'),'/update-nic.json')]",
-        "updateIP2URI": "[concat(parameters('artifactsBaseURL'),'/update-nic2.json')]"
+        "publicIP2ID": "[resourceID(parameters('fwObject').publicIP2AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP2AddressName)]",
+        "publicIP3ID": "[resourceID(parameters('fwObject').publicIP3AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP3AddressName)]",
+        "NSGName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-',uniqueString(resourceGroup().id),'-NSG')]"
     },
     "functions": [
         {
@@ -118,19 +74,6 @@
     ],
     "resources": [
         {
-            "apiVersion": "2018-02-01",
-            "name": "pid-2dc4b447-552f-557f-b1cc-2faec6f9f133",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "template": {
-                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deplymentTemplate.json#",
-                    "contentVersion": "1.0.0.0",
-                    "resources": []
-                }
-            }
-        },
-        {
             "type": "Microsoft.Compute/availabilitySets",
             "name": "[variables('compute_AvailabilitySet_FG_Name')]",
             "apiVersion": "2017-03-30",
@@ -142,25 +85,6 @@
             },
             "sku": {
                 "name": "Aligned"
-            }
-        },
-        {
-            "type": "Microsoft.Network/routeTables",
-            "name": "[variables('routeTableName')]",
-            "apiVersion": "2017-09-01",
-            "tags": "[parameters('fwObject').tagValues]",
-            "location": "[resourceGroup().location]",
-            "properties": {
-                "routes": [
-                    {
-                        "name": "toDefault",
-                        "properties": {
-                            "addressPrefix": "0.0.0.0/0",
-                            "nextHopType": "VirtualAppliance",
-                            "nextHopIPAddress": "[variables('subnet2KnownIP')]"
-                        }
-                    }
-                ]
             }
         },
         {
@@ -251,7 +175,6 @@
             "name": "[variables('network_NIC_fg11_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]",
                 "[variables('NSGName')]"
             ],
             "properties": {
@@ -262,6 +185,9 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[variables('publicIPID')]"
                             }
                         }
                     }
@@ -280,7 +206,6 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('network_NIC_fg11_Name')]",
-                "[parameters('fwObject').vnetName]",
                 "[variables('NSGName')]"
             ],
             "properties": {
@@ -308,22 +233,24 @@
             "name": "[variables('network_NIC_fg12_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]"
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
                     {
                         "name": "ipconfig1",
                         "properties": {
-                            "privateIPAllocationMethod": "Static",
-                            "privateIPAddress": "[variables('subnet2KnownIP')]",
+                            "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet2Ref')]"
                             }
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -333,8 +260,8 @@
             "name": "[variables('network_NIC_fg22_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]",
-                "[variables('network_NIC_fg12_Name')]"
+                "[variables('network_NIC_fg12_Name')]",
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -348,7 +275,10 @@
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -358,7 +288,7 @@
             "name": "[variables('network_NIC_fg13_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]"
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -372,7 +302,10 @@
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -382,8 +315,8 @@
             "name": "[variables('network_NIC_fg23_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]",
-                "[variables('network_NIC_fg13_Name')]"
+                "[variables('network_NIC_fg13_Name')]",
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -397,7 +330,10 @@
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -407,7 +343,7 @@
             "name": "[variables('network_NIC_fg14_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]"
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -417,11 +353,17 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet4Ref')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[variables('publicIP2ID')]"
                             }
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -431,8 +373,8 @@
             "name": "[variables('network_NIC_fg24_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[parameters('fwObject').vnetName]",
-                "[variables('network_NIC_fg14_Name')]"
+                "[variables('network_NIC_fg14_Name')]",
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -442,11 +384,17 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet4Ref')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[variables('publicIP3ID')]"
                             }
                         }
                     }
                 ],
-                "enableIPForwarding": true
+                "enableIPForwarding": true,
+                "networkSecurityGroup": {
+                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
+                }
             }
         },
         {
@@ -685,7 +633,7 @@
                     "computerName": "[variables('compute_VM_fg1_Name')]",
                     "adminUsername": "[parameters('fwObject').adminUsername]",
                     "adminPassword": "[parameters('adminPassword')]",
-                    "customData": "[base64(concat('config system global\n set admin-sport 8443\n end\n config router static\n edit 1\n set gateway ', variables('sn1GatewayIP'), '\n set device port1\n next\n edit 2\n set dst ', parameters('fwObject').vnetAddressPrefix, '\n set gateway ', variables('sn2GatewayIP'), '\n set device port2\n next\n edit 3\nset dst 168.63.129.16 255.255.255.255\nset device port2\n set gateway ', variables ('sn2GatewayIP'), '\n next\nedit 4\nset dst 168.63.129.16 255.255.255.255\nset device port1\n set gateway ', variables ('sn1GatewayIP'), '\n next\n end\n config system interface\n edit port1\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg11_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn1CIDRmask'), '\n set description external\n next\n edit port2\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg12_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn2CIDRmask'), '\n set description internal\n next\n edit port3\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg13_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn3CIDRmask'), '\n set description hasyncport\n next\n edit port4\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg14_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn4CIDRmask'), '\n set description management\n set allowaccess ping https ssh ftm\n next\n end\n config system ha\n set group-name AzureHA\n set mode a-p\n set hbdev port3 100\n set session-pickup enable\n set session-pickup-connectionless enable\n set ha-mgmt-status enable\n config ha-mgmt-interfaces\n edit 1\n set interface port4\n set gateway ', variables('sn4GatewayIP'),'\n next\n end\n set override disable\n set priority 255\n set unicast-hb enable\n set unicast-hb-peerip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg23_Name'))).ipConfigurations[0].properties.privateIPAddress, '\n end'))]"
+                    "customData": "[parameters('fwObject').firewall1Config]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -763,7 +711,7 @@
                     "computerName": "[variables('compute_VM_fg2_Name')]",
                     "adminUsername": "[parameters('fwObject').adminUsername]",
                     "adminPassword": "[parameters('adminPassword')]",
-                    "customData": "[base64(concat('config system global\n set admin-sport 8443\n end\n config router static\n edit 1\n set gateway ', variables('sn1GatewayIP'), '\n set device port1\n next\n edit 2\n set dst ', parameters('fwObject').vnetAddressPrefix, '\n set gateway ', variables('sn2GatewayIP'), '\n set device port2\n next\n edit 3\nset dst 168.63.129.16 255.255.255.255\nset device port2\n set gateway ', variables ('sn2GatewayIP'), '\n next\nedit 4\nset dst 168.63.129.16 255.255.255.255\nset device port1\n set gateway ', variables ('sn1GatewayIP'), '\n next\n end\n config system interface\n edit port1\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg21_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn1CIDRmask'), '\n set description external\n next\n edit port2\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg22_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn2CIDRmask'), '\n set description internal\n next\n edit port3\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg23_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn3CIDRmask'), '\n set description hasyncport\n next\n edit port4\n set mode static\n set ip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg24_Name'))).ipConfigurations[0].properties.privateIPAddress, '/', variables('sn4CIDRmask'), '\n set description management\n set allowaccess ping https ssh ftm\n next\n end\n config system ha\n set group-name AzureHA\n set mode a-p\n set hbdev port3 100\n set session-pickup enable\n set session-pickup-connectionless enable\n set ha-mgmt-status enable\n config ha-mgmt-interfaces\n edit 1\n set interface port4\n set gateway ', variables('sn4GatewayIP'),'\n next\n end\n set override disable\n set priority 1\n set unicast-hb enable\n set unicast-hb-peerip ', reference(concat('Microsoft.Network/networkInterfaces/', variables('network_NIC_fg13_Name'))).ipConfigurations[0].properties.privateIPAddress, '\n end'))]"
+                    "customData": "[parameters('fwObject').firewall2Config]"
                 },
                 "storageProfile": {
                     "imageReference": {
