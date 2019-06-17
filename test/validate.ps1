@@ -1,7 +1,7 @@
 Param(
     [Parameter(Mandatory = $false)][string]$templateLibraryName = (Split-Path (Resolve-Path "$PSScriptRoot\..") -Leaf),
     [string]$Location = "canadacentral",
-    [string]$subscription = "",
+    [string]$subscription = "2de839a0-37f9-4163-a32a-e1bdb8d6eb7e",
     [switch]$devopsCICD = $false,
     [switch]$doNotCleanup = $false,
     [switch]$doNotDeployPreReq = $false
@@ -41,7 +41,7 @@ if (-not $devopsCICD) {
         Write-Host "You are working off the master branch... Validation will happen against the github master branch code and will not include any changes you may have made."
         Write-Host "If you want to walidate changes you have made make sure to create a new branch and push those to the remote github server with something like:"
         Write-Host ""
-        Write-Host "git branch dev ; git checkout dev; git add ..\. ; git commit -m "Update validation" ; git push -u origin dev"
+        Write-Host "git branch dev ; git checkout dev; git add ..\. ; git commit -m \"Update validation\" ; git push -u origin dev"
     }
     else {
         # Make sure we update code to git
