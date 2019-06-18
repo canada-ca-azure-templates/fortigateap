@@ -302,7 +302,8 @@
             "name": "[variables('network_NIC_fg12_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[variables('NSGName')]"
+                "[variables('NSGName')]",
+                "[variables('internalLBName')]"
             ],
             "properties": {
                 "ipConfigurations": [
