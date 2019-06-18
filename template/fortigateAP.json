@@ -43,7 +43,12 @@
         "publicIPID": "[resourceID(parameters('fwObject').publicIPAddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIPAddressName)]",
         "publicIP2ID": "[resourceID(parameters('fwObject').publicIP2AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP2AddressName)]",
         "publicIP3ID": "[resourceID(parameters('fwObject').publicIP3AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP3AddressName)]",
-        "NSGName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-',uniqueString(resourceGroup().id),'-NSG')]"
+        "NSGName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-',uniqueString(resourceGroup().id),'-NSG')]",
+        "internalLBName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-InternalLoadBalancer')]",
+        "internalLBFE2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ILB-',parameters('fwObject').Subnet2Name,'-FrontEnd')]",
+        "internalLBBE2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ILB-',parameters('fwObject').Subnet2Name,'-BackEnd')]",
+        "internalLBid": "[resourceID('Microsoft.Network/loadBalancers',variables('internalLBName'))]",
+        "internalLB_BE2Id": "[concat(variables('internalLBid'),'/backendAddressPools/',variables('internalLBBE2Name'))]"
     },
     "functions": [
         {
@@ -85,6 +90,69 @@
             },
             "sku": {
                 "name": "Aligned"
+            }
+        },
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "name": "[variables('internalLBName')]",
+            "apiVersion": "2017-09-01",
+            "tags": "[parameters('fwObject').tagValues]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard"
+            },
+            "dependsOn": [
+                
+            ],
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "[variables('internalLBFE2Name')]",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('subnet2Ref')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[variables('internalLBBE2Name')]"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "properties": {
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('internalLBName')), '/frontendIpConfigurations/', variables('internalLBFE2Name'))]"
+                            },
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('internalLBName')), '/backendAddressPools/', variables('internalLBBE2Name'))]"
+                            },
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('internalLBName')), '/probes/lbprobe')]"
+                            },
+                            "protocol": "All",
+                            "frontendPort": 0,
+                            "backendPort": 0,
+                            "enableFloatingIP": true,
+                            "idleTimeoutInMinutes": 15
+                        },
+                        "name": "lbruleFE2all"
+                    }
+                ],
+                "probes": [
+                    {
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 8008,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        },
+                        "name": "lbprobe"
+                    }
+                ]
             }
         },
         {
@@ -244,7 +312,12 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet2Ref')]"
-                            }
+                            },
+                            "loadBalancerBackendAddressPools": [
+                              {
+                                "id": "[variables('internalLB_BE2Id')]"
+                              }
+                            ]
                         }
                     }
                 ],
@@ -272,7 +345,12 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet2Ref')]"
-                            }
+                            },
+                            "loadBalancerBackendAddressPools": [
+                              {
+                                "id": "[variables('internalLB_BE2Id')]"
+                              }
+                            ]
                         }
                     }
                 ],
