@@ -4,8 +4,8 @@
     "parameters": {
         "lbObject": {
             "value": {
-                "FortiGateNamePrefix": "validate",
-                "publicIPAddressResourceGroup": "PwS2-validate-fortigateAP-RG",
+                "FortiGateNamePrefix": "PwP0FWCore",
+                "publicIPAddressResourceGroup": "PwP0-Core-FWCore-RG",
                 "probes": [
                     {
                         "properties": {
