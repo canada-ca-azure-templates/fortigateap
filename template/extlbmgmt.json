@@ -23,6 +23,10 @@
             "sku": {
                 "name": "Standard"
             },
+            "copy": {
+                "name": "obj",
+                "count": "[length(parameters('lbObject').lbRules)]"
+            },
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -39,10 +43,6 @@
                         "name": "[variables('network_LB_Public_BEName')]"
                     }
                 ],
-                "copy": {
-                    "name": "obj",
-                    "count": "[length(parameters('lbObject').lbRules)]"
-                },
                 "loadBalancingRules": [
                     {
                         "properties": {
