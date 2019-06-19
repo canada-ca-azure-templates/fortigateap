@@ -52,7 +52,7 @@
                                     "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
                                 },
                                 "probe": {
-                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/', parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].probes)]"
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/', parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].probe)]"
                                 },
                                 "protocol": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].protocol]",
                                 "frontendPort": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].frontendPort]",
