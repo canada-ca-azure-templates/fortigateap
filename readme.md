@@ -2,7 +2,11 @@
 
 ## Introduction
 
-This template deploys a 2 x 4 NIC Fortigate Firewall resource in an HA Active Passive configuration.
+This template deploys a 2 x 4 NIC Fortigate Firewall resource in an HA Active Passive configuration. An internal loadbalancer is also created to handle all outbound traffic to the internal Interface of the firewall.
+
+An external firewall is created to handle balancing traffic for public services exposed to the active firewall node.
+
+Each firewall is given two public IP. One for management and one to help troubleshoot external service access.
 
 ## Security Controls
 
