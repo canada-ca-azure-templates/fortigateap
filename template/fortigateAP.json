@@ -48,13 +48,7 @@
         "internalLBFE2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ILB-',parameters('fwObject').Subnet2Name,'-FrontEnd')]",
         "internalLBBE2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ILB-',parameters('fwObject').Subnet2Name,'-BackEnd')]",
         "internalLBid": "[resourceID('Microsoft.Network/loadBalancers',variables('internalLBName'))]",
-        "internalLB_BE2Id": "[concat(variables('internalLBid'),'/backendAddressPools/',variables('internalLBBE2Name'))]",
-        "network_LB_Public_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'publicLoadBalancer')]",
-        "network_LB_Public_Id": "[resourceId('Microsoft.Network/loadBalancers',variables('network_LB_Public_Name'))]",
-        "network_LB_Public_FEName": "[concat(parameters('fwObject').FortiGateNamePrefix,'publicLBFE')]",
-        "network_LB_Public_FEId": "[concat(variables('network_LB_Public_Id'),'/frontendIPConfigurations/',variables('network_LB_Public_FEName'))]",
-        "network_LB_Public_BEName": "[concat(parameters('fwObject').FortiGateNamePrefix,'publicLBBE')]",
-        "network_LB_Public_BEId": "[concat(variables('network_LB_Public_Id'),'/backendAddressPools/',variables('network_LB_Public_BEName'))]"
+        "internalLB_BE2Id": "[concat(variables('internalLBid'),'/backendAddressPools/',variables('internalLBBE2Name'))]"
     },
     "functions": [
         {
@@ -160,107 +154,6 @@
             }
         },
         {
-            "type": "Microsoft.Network/loadBalancers",
-            "name": "[variables('network_LB_Public_Name')]",
-            "apiVersion": "2017-09-01",
-            "tags": "[parameters('fwObject').tagValues]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Standard"
-            },
-            "dependsOn": [
-                "[variables('publicIPID')]"
-            ],
-            "properties": {
-                "frontendIPConfigurations": [
-                    {
-                        "name": "[variables('network_LB_Public_FEName')]",
-                        "properties": {
-                            "publicIPAddress": {
-                                "id": "[variables('publicIPID')]"
-                            }
-                        }
-                    }
-                ],
-                "backendAddressPools": [
-                    {
-                        "name": "[variables('network_LB_Public_BEName')]"
-                    }
-                ],
-                "loadBalancingRules": [
-                    {
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
-                            },
-                            "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
-                            },
-                            "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/lbprobe')]"
-                            },
-                            "protocol": "Tcp",
-                            "frontendPort": 80,
-                            "backendPort": 80,
-                            "enableFloatingIP": true,
-                            "idleTimeoutInMinutes": 15
-                        },
-                        "name": "PublicLBRule-FE1-http"
-                    },
-                    {
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
-                            },
-                            "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
-                            },
-                            "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/lbprobe')]"
-                            },
-                            "protocol": "Udp",
-                            "frontendPort": 500,
-                            "backendPort": 500,
-                            "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 15
-                        },
-                        "name": "PublicLBRule-FE1-udp500"
-                    },
-                    {
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
-                            },
-                            "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
-                            },
-                            "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/lbprobe')]"
-                            },
-                            "protocol": "Udp",
-                            "frontendPort": 4500,
-                            "backendPort": 4500,
-                            "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 15
-                        },
-                        "name": "PublicLBRule-FE1-udp4500"
-                    }
-                ],
-                "inboundNatRules": [],
-                "probes": [
-                    {
-                        "properties": {
-                            "protocol": "Tcp",
-                            "port": 8008,
-                            "intervalInSeconds": 5,
-                            "numberOfProbes": 2
-                        },
-                        "name": "lbprobe"
-                    }
-                ]
-            }
-        },
-        {
             "apiVersion": "2017-09-01",
             "tags": "[parameters('fwObject').tagValues]",
             "type": "Microsoft.Network/networkSecurityGroups",
@@ -348,8 +241,7 @@
             "name": "[variables('network_NIC_fg11_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[variables('NSGName')]",
-                "[variables('network_LB_Public_Name')]"
+                "[variables('NSGName')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -359,12 +251,7 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
-                            },
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[variables('network_LB_Public_BEId')]"
-                                }
-                            ]
+                            }
                         }
                     }
                 ],
@@ -393,12 +280,7 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
-                            },
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[variables('network_LB_Public_BEId')]"
-                                }
-                            ]
+                            }
                         }
                     }
                 ],
