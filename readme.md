@@ -4,9 +4,9 @@
 
 This template deploys a 2 x 4 NIC Fortigate Firewall resource in an HA Active Passive configuration. An internal loadbalancer is also created to handle all outbound traffic to the internal Interface of the firewall.
 
-An external firewall is created to handle balancing traffic for public services exposed to the active firewall node.
+An external loadbalancer is created to handle balancing traffic for public services exposed to the active firewall node.
 
-Each firewall is given two public IP. One for management and one to help troubleshoot external service access.
+Each firewall node is given two public IP. One for management and one to help troubleshoot external service access.
 
 ## Security Controls
 
@@ -86,7 +86,7 @@ The following security controls can be met through configuration of this templat
 | Name                          | Type   | Required | Value                                                                                                                                                           |
 | ----------------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | vmKeyVault                    | object | Yes      | Keyvault resource information - [Keyvault Object](#keyvault-object)                                                                                             |
-| FortiGateName                 | string | Yes      | Name of the firewall Virtual Machine.                                                                                                                           |
+| FortiGateNamePrefix           | string | Yes      | Name prefix of the firewall Virtual Machines and other resources.                                                                                               |
 | adminUsername                 | string | Yes      | Name of the Fortigate admin user                                                                                                                                |
 | adminSecret                   | string | Yes      | Name of the keyvault secret containing the Fortigate admin user password                                                                                        |
 | FortiGateImageSKU             | string | Yes      | SKU for the fortigate image - fortinet_fg-vm or fortinet_fg-vm_payg                                                                                             |
