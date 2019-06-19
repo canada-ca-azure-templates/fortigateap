@@ -349,7 +349,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('NSGName')]",
-                "[variables('network_LB_Public_BEId')]"
+                "[variables('network_LB_Public_Name')]"
             ],
             "properties": {
                 "ipConfigurations": [
