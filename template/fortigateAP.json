@@ -231,42 +231,6 @@
         },
         {
             "apiVersion": "2017-09-01",
-            "tags": {
-                "provider": "[toUpper(parameters('FortinetTags').provider)]"
-            },
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('network_NIC_fg11_Name')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[parameters('vnetName')]",
-                "[variables('NSGName')]",
-                "[variables('network_LB_Public_Name')]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[variables('subnet1Ref')]"
-                            },
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[variables('network_LB_Public_BEId')]"
-                                }
-                            ]
-                        }
-                    }
-                ],
-                "enableIPForwarding": true,
-                "networkSecurityGroup": {
-                    "id": "[resourceID('Microsoft.Network/networkSecurityGroups/',variables('NSGName'))]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2017-09-01",
             "tags": "[parameters('fwObject').tagValues]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "name": "[variables('NSGName')]",
