@@ -39,12 +39,12 @@
                         "name": "[variables('network_LB_Public_BEName')]"
                     }
                 ],
+                "copy": {
+                    "name": "obj",
+                    "count": "[length(parameters('lbObject').lbRules)]"
+                },
                 "loadBalancingRules": [
                     {
-                        "copy": {
-                            "name": "obj",
-                            "count": "[length(parameters('lbObject').lbRules)]"
-                        },
                         "properties": {
                             "frontendIPConfiguration": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
