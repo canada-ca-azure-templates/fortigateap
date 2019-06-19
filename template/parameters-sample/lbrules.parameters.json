@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "lbObject": {
+            "value": {
+                "FortiGateNamePrefix": "PwP0FWCore",
+                "publicIPAddressResourceGroup": "PwP0-Core-FWCore-RG",
+                "probes": [
+                    {
+                        "properties": {
+                            "protocol": "Tcp",
+                            "port": 8008,
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2
+                        },
+                        "name": "lbprobe"
+                    }
+                ],
+                "lbRules": [
+                    {
+                        "name": "jumpboxRDP",
+                        "protocol": "Tcp",
+                        "frontendPort": 33890,
+                        "backendPort": 33890,
+                        "enableFloatingIP": false,
+                        "idleTimeoutInMinutes": 15,
+                        "probe": "lbprobe"
+                    },
+                    {
+                        "name": "RDSGW",
+                        "protocol": "Tcp",
+                        "frontendPort": 443,
+                        "backendPort": 443,
+                        "enableFloatingIP": false,
+                        "idleTimeoutInMinutes": 15,
+                        "probe": "lbprobe"
+                    }
+                ],
+                "tagValues": {
+                    "Owner": "build.pipeline@tpsgc-pwgsc.gc.ca",
+                    "CostCenter": "PSPC-EA",
+                    "Enviroment": "Validate",
+                    "Classification": "Unclassified",
+                    "Organizations": "PSPC-CCC-E&O"
+                }
+            }
+        }
+    }
+}

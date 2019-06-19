@@ -88,15 +88,17 @@ The following security controls can be met through configuration of this templat
 | FortiGateImageSKU             | string | Yes      | SKU for the fortigate image - fortinet_fg-vm or fortinet_fg-vm_payg                                                                                             |
 | FortiGateImageVersion         | string | Yes      | Version of the firewall marketplace image - 5.6.6, 6.0.3, 6.0.4 or latest. Recommended values: latest                                                           |
 | instanceType                  | string | Yes      | Virtual Machine size selection. Recommended value: Standard_F4s                                                                                                 |
-| publicIPAddressName           | string | Yes      | Name of the Public IP Address                                                                                                                                   |
-| publicIP2AddressName          | string | Yes      | Name of the Public IP 2 Address                                                                                                                                 |
 | publicIPAddressType           | string | Yes      | Type of public IP address - dynamic or static. Recommended value: static                                                                                        |
 | publicIPNewOrExisting         | string | Yes      | Indicates whether a Public IP is required - none, new or existing. Recommended value: none unless one is required. In this case: new                            |
 | publicIP2NewOrExisting        | string | Yes      | Indicates whether a Public IP 2 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
 | publicIP3NewOrExisting        | string | Yes      | Indicates whether a Public IP 3 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
+| publicIP4NewOrExisting        | string | Yes      | Indicates whether a Public IP 4 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
+| publicIP5NewOrExisting        | string | Yes      | Indicates whether a Public IP 5 is required - none, new or existing. Recommended value: none unless one is required. In this case: new                          |
 | publicIPAddressResourceGroup  | string | Yes      | Resource Group of the public IP                                                                                                                                 |
 | publicIP2AddressResourceGroup | string | Yes      | Resource Group of the public IP 2                                                                                                                               |
 | publicIP3AddressResourceGroup | string | Yes      | Resource Group of the public IP 3                                                                                                                               |
+| publicIP4AddressResourceGroup | string | Yes      | Resource Group of the public IP 4                                                                                                                               |
+| publicIP5AddressResourceGroup | string | Yes      | Resource Group of the public IP 5                                                                                                                               |
 | publicIPAddressType           | string | Yes      | Type of public IP. - Static or Dynamic                                                                                                                          |
 | vnetName                      | string | Yes      | Virtual Network name                                                                                                                                            |
 | vnetResourceGroup             | string | Yes      | Name of the Resource Group containing the VNET defined above                                                                                                    |
@@ -108,14 +110,14 @@ The following security controls can be met through configuration of this templat
 | firewall2Config               | string | Yes      | Base64 encoded multipart/mixed string of [Firewall Config and License](#firewall-config-and-license). Leave empty ("") if no firewall configuration is required |
 | tagValues                     | object | Yes      | Object of tag values                                                                                                                                            |
 
-### Keyvault Object
+#### Keyvault Object
 
 | Name                      | Type                           | Required | Value                                                                   |
 | ------------------------- | ------------------------------ | -------- | ----------------------------------------------------------------------- |
 | keyVaultResourceGroupName | PwS2-validate-Fortigate2NIC-RG | Yes      | Name of the Resource Group containing the keyvault                      |
 | keyVaultName              | PwS2-validate-[unique]         | Yes      | Name of keyvault resource - [Name format options](#name-format-options) |
 
-#### Name Format Options
+##### Name Format Options
 
 When specifying the name of a keyvault simply include the token [unique] (including the []) as part of the name. The template will replace the [unique] word with a unique string of characters. For example:
 
@@ -126,7 +128,7 @@ When specifying the name of a keyvault simply include the token [unique] (includ
 
 This is helpfull to ensure there will be no keyvault duplicates in Azure as it need to be unique.
 
-### Firewall Config and License
+#### Firewall Config and License
 
 Two part mime message comprised of the desired firewall configuration and the fortigate license. Here is an example of the mime message:
 
@@ -233,6 +235,8 @@ uH+sdb3Nuc0=
 
 ## History
 
-| Date     | Release                                                                            | Change                  |
-| -------- | ---------------------------------------------------------------------------------- | ----------------------- |
-| 20190614 | [20190614](https://github.com/canada-ca-azure-templates/fortigateha/tree/20190614) | 1st release of template |
+| Date     | Release                                                                            | Change                                                                                         |
+| -------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 20190614 | [20190614](https://github.com/canada-ca-azure-templates/fortigateha/tree/20190614) | 1st release of template                                                                        |
+| 20190619 | [20190619](https://github.com/canada-ca-azure-templates/fortigateha/tree/20190619) | Adding Internal and External LB to template.                                                   |
+|          |                                                                                    | Add new template to update External LB Rules and Probes after the firewall deployment is done. |

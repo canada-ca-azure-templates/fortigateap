@@ -1,0 +1,72 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "lbObject": {
+            "type": "object"
+        }
+    },
+    "variables": {
+        "publicIPID_ELB_Name": "[concat(parameters('lbObject').FortiGateNamePrefix,'-ELB-PubIP')]",
+        "publicIPID_ELB": "[resourceID(parameters('lbObject').publicIPAddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_ELB_Name'))]",
+        "network_LB_Public_Name": "[concat(parameters('lbObject').FortiGateNamePrefix,'-ExternalLoadBalancer')]",
+        "network_LB_Public_FEName": "[concat(parameters('lbObject').FortiGateNamePrefix,'publicLBFE')]",
+        "network_LB_Public_BEName": "[concat(parameters('lbObject').FortiGateNamePrefix,'publicLBBE')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/loadBalancers",
+            "name": "[variables('network_LB_Public_Name')]",
+            "apiVersion": "2017-09-01",
+            "tags": "[parameters('lbObject').tagValues]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "frontendIPConfigurations": [
+                    {
+                        "name": "[variables('network_LB_Public_FEName')]",
+                        "properties": {
+                            "publicIPAddress": {
+                                "id": "[variables('publicIPID_ELB')]"
+                            }
+                        }
+                    }
+                ],
+                "backendAddressPools": [
+                    {
+                        "name": "[variables('network_LB_Public_BEName')]"
+                    }
+                ],
+                "copy": [
+                    {
+                        "name": "loadBalancingRules",
+                        "count": "[length(parameters('lbObject').lbRules)]",
+                        "input": {
+                            "properties": {
+                                "frontendIPConfiguration": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
+                                },
+                                "backendAddressPool": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
+                                },
+                                "probe": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/', parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].probe)]"
+                                },
+                                "protocol": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].protocol]",
+                                "frontendPort": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].frontendPort]",
+                                "backendPort": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].backendPort]",
+                                "enableFloatingIP": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].enableFloatingIP]",
+                                "idleTimeoutInMinutes": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].idleTimeoutInMinutes]"
+                            },
+                            "name": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].name]"
+                        }
+                    }
+                ],
+                "inboundNatRules": [],
+                "probes": "[parameters('lbObject').probes]"
+            }
+        }
+    ]
+}
