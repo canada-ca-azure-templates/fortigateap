@@ -40,9 +40,18 @@
         "network_NIC_fg14_Id": "[resourceId('Microsoft.Network/networkInterfaces',variables('network_NIC_fg14_Name'))]",
         "network_NIC_fg24_Name": "[concat(variables('vm2Name'),'-Nic4')]",
         "network_NIC_fg24_Id": "[resourceId('Microsoft.Network/networkInterfaces',variables('network_NIC_fg24_Name'))]",
-        "publicIPID": "[resourceID(parameters('fwObject').publicIPAddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIPAddressName)]",
-        "publicIP2ID": "[resourceID(parameters('fwObject').publicIP2AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP2AddressName)]",
-        "publicIP3ID": "[resourceID(parameters('fwObject').publicIP3AddressResourceGroup,'Microsoft.Network/publicIPAddresses',parameters('fwObject').publicIP3AddressName)]",
+
+        "publicIPID_ELB_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ELB-PubIP')]",
+        "publicIPID_AMGMT_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-AMGMT-PubIP')]",
+        "publicIPID_BMGMT_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-BMGMT-PubIP')]",
+        "publicIPID_APUB_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-APUB-PubIP')]",
+        "publicIPID_BPUB_Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-BPUB-PubIP')]",
+        "publicIPID_ELB": "[resourceID(parameters('fwObject').publicIPAddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_ELB_Name'))]",
+        "publicIPID_AMGMT": "[resourceID(parameters('fwObject').publicIP2AddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_AMGMT_Name'))]",
+        "publicIPID_BMGMT": "[resourceID(parameters('fwObject').publicIP3AddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_BMGMT_Name'))]",
+        "publicIPID_APUB": "[resourceID(parameters('fwObject').publicIP4AddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_APUB_Name'))]",
+        "publicIPID_BPUB": "[resourceID(parameters('fwObject').publicIP5AddressResourceGroup,'Microsoft.Network/publicIPAddresses',variables('publicIPID_BPUB_Name'))]",
+        
         "NSGName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-',uniqueString(resourceGroup().id),'-NSG')]",
         "internalLBName": "[concat(parameters('fwObject').FortiGateNamePrefix,'-InternalLoadBalancer')]",
         "internalLBFE2Name": "[concat(parameters('fwObject').FortiGateNamePrefix,'-ILB-',parameters('fwObject').Subnet2Name,'-FrontEnd')]",
@@ -197,7 +206,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-09-01",
             "tags": "[parameters('fwObject').tagValues]",
-            "name": "[parameters('fwObject').publicIPAddressName]",
+            "name": "[variables('publicIPID_ELB_Name')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard"
@@ -211,7 +220,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-09-01",
             "tags": "[parameters('fwObject').tagValues]",
-            "name": "[parameters('fwObject').publicIP2AddressName]",
+            "name": "[variables('publicIPID_AMGMT_Name')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard"
@@ -225,7 +234,35 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2017-09-01",
             "tags": "[parameters('fwObject').tagValues]",
-            "name": "[parameters('fwObject').publicIP3AddressName]",
+            "name": "[variables('publicIPID_BMGMT_Name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "[parameters('fwObject').publicIPAddressType]"
+            }
+        },
+        {
+            "condition": "[equals(parameters('fwObject').publicIP4NewOrExisting, 'new')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2017-09-01",
+            "tags": "[parameters('fwObject').tagValues]",
+            "name": "[variables('publicIPID_APUB_Name')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "[parameters('fwObject').publicIPAddressType]"
+            }
+        },
+        {
+            "condition": "[equals(parameters('fwObject').publicIP5NewOrExisting, 'new')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2017-09-01",
+            "tags": "[parameters('fwObject').tagValues]",
+            "name": "[variables('publicIPID_BPUB_Name')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard"
@@ -241,7 +278,8 @@
             "name": "[variables('network_NIC_fg11_Name')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[variables('NSGName')]"
+                "[variables('NSGName')]",
+                "[variables('publicIPID_APUB_Name')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -251,6 +289,9 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[variables('publicIPID_APUB')]"
                             }
                         }
                     }
@@ -270,7 +311,7 @@
             "dependsOn": [
                 "[variables('network_NIC_fg11_Name')]",
                 "[variables('NSGName')]",
-                "[parameters('fwObject').publicIPAddressName]"
+                "[variables('publicIPID_BPUB_Name')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -280,6 +321,9 @@
                             "privateIPAllocationMethod": "Dynamic",
                             "subnet": {
                                 "id": "[variables('subnet1Ref')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[variables('publicIPID_BPUB')]"
                             }
                         }
                     }
@@ -419,7 +463,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[variables('NSGName')]",
-                "[parameters('fwObject').publicIP2AddressName]"
+                "[variables('publicIPID_AMGMT_Name')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -431,7 +475,7 @@
                                 "id": "[variables('subnet4Ref')]"
                             },
                             "publicIPAddress": {
-                                "id": "[variables('publicIP2ID')]"
+                                "id": "[variables('publicIPID_AMGMT')]"
                             }
                         }
                     }
@@ -451,7 +495,7 @@
             "dependsOn": [
                 "[variables('network_NIC_fg14_Name')]",
                 "[variables('NSGName')]",
-                "[parameters('fwObject').publicIP3AddressName]"
+                "[variables('publicIPID_BMGMT_Name')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -463,7 +507,7 @@
                                 "id": "[variables('subnet4Ref')]"
                             },
                             "publicIPAddress": {
-                                "id": "[variables('publicIP3ID')]"
+                                "id": "[variables('publicIPID_BMGMT')]"
                             }
                         }
                     }
