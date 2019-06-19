@@ -23,10 +23,6 @@
             "sku": {
                 "name": "Standard"
             },
-            "copy": {
-                "name": "obj",
-                "count": "[length(parameters('lbObject').lbRules)]"
-            },
             "properties": {
                 "frontendIPConfigurations": [
                     {
@@ -43,25 +39,29 @@
                         "name": "[variables('network_LB_Public_BEName')]"
                     }
                 ],
-                "loadBalancingRules": [
+                "copy": [
                     {
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
+                        "name": "loadBalancingRules",
+                        "count": "[length(parameters('lbObject').lbRules)]",
+                        "input": {
+                            "properties": {
+                                "frontendIPConfiguration": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/frontendIpConfigurations/', variables('network_LB_Public_FEName'))]"
+                                },
+                                "backendAddressPool": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
+                                },
+                                "probe": {
+                                    "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/', parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].probes)]"
+                                },
+                                "protocol": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].protocol]",
+                                "frontendPort": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].frontendPort]",
+                                "backendPort": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].backendPort]",
+                                "enableFloatingIP": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].enableFloatingIP]",
+                                "idleTimeoutInMinutes": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].idleTimeoutInMinutes]"
                             },
-                            "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/backendAddressPools/', variables('network_LB_Public_BEName'))]"
-                            },
-                            "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('network_LB_Public_Name')), '/probes/', parameters('lbObject').lbRules[copyIndex()].probes)]"
-                            },
-                            "protocol": "[parameters('lbObject').lbRules[copyIndex()].protocol]",
-                            "frontendPort": "[parameters('lbObject').lbRules[copyIndex()].frontendPort]",
-                            "backendPort": "[parameters('lbObject').lbRules[copyIndex()].backendPort]",
-                            "enableFloatingIP": "[parameters('lbObject').lbRules[copyIndex()].enableFloatingIP]",
-                            "idleTimeoutInMinutes": "[parameters('lbObject').lbRules[copyIndex()].idleTimeoutInMinutes]"
-                        },
-                        "name": "[parameters('lbObject').lbRules[copyIndex()].name]"
+                            "name": "[parameters('lbObject').lbRules[copyIndex('loadBalancingRules')].name]"
+                        }
                     }
                 ],
                 "inboundNatRules": [],
